@@ -13,7 +13,7 @@ The two datasets can be modelled together based on the common identifier ASIN, w
 
 ### Purpose of the data model
 
-I aim to model the data to support data analysis. in areas such as:
+I aim to model the data to support data analysis in areas such as:
 
 - sentiment analysis of reviews
 - analyse correlation of reviews and sales metrics
