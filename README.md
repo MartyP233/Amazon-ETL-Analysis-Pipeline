@@ -35,7 +35,9 @@ there is a large number of different publishers, the most common publisher publi
 Sales Rank data is present in multiple JSON files.
 
 # TODO: understand and desribe content and data quality of JSON files
-* more to come here
+66760 JSON files, with ASIN in their filename and timestamp and salesranks as key value pairs within the json.
+
+asin's will need to be extracted from filename and created as a asin field
 
 ### Kindle Reviews Data
 The datasource consists of 1 csv file with kindle review data such as  ASIN, helpfullness of review, overall review, reviewtext review time etc.
@@ -53,6 +55,12 @@ Review times range beteen March 2000 and July 2014, with most data in the 2013-1
 
 ### TODO: Design and document the data model
 - Map out the conceptual data model and explain why you chose that model
+
+![ERD](media/erd.png)
+
+I have chosen a snowflake schema, as it will support analysts to write analytical queries in less complex ways with less joins required. There is is some redundancy in the data as a consequence, which in this case is fine. In a web app backend I would 
+normalize the data further.
+
 ### TODO: Plan ETL pipeline
 - List the steps necessary to pipeline the data into the chosen data model
 - Include this thinking for the project writeup:
