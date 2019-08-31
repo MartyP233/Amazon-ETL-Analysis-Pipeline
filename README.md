@@ -19,7 +19,7 @@ I aim to model the data to support data analysis in areas such as:
 - analyse correlation of reviews and sales metrics
 - highest rated and best selling kindle products.
 
-My data analysis model will be a star schema, to create flexiblity and simplicity for carrying out data analysis. 
+My data analysis model will be a star / snowflake schema, to create flexiblity and simplicity for carrying out data analysis. 
 
 ## Exploratory Data Analysis
 
@@ -72,6 +72,11 @@ Propose how often the data should be updated and why.
 ## The ETL pipeline
 
 ### TODO: Create the data pipelines and the data model
+# create redshift db
+# create tables
+# load data
+# transform
+
 ### TODO: Create a data dictionary
 ### TODO: Create and Run data quality checks to ensure the pipeline ran as expected
 - Integrity constraints on the relational database (e.g., unique key, data type, etc.)
