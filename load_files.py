@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
 import configparser
-from sql_queries import copy_table_queries, create_table_queries
+from sql_queries import copy_table_queries, create_table_queries, drop_table_queries
 import psycopg2
 import pandas as pd
 import csv
@@ -69,6 +69,7 @@ def main():
     con = psycopg2.connect(f"dbname={DWH_DB} host={DWH_ENDPOINT} port={DWH_PORT} user={DWH_DB_USER} password={DWH_DB_PASSWORD}")
     cur = con.cursor()
 
+    drop_table_queries(cur, con)
     create_tables(cur, con)
     load_staging_tables(cur, con)
 
