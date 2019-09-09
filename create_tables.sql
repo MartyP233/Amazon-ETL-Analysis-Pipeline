@@ -2,7 +2,7 @@ CREATE TABLE public.books (
 	asin varchar(256) NOT NULL,
 	"group" varchar(50),
 	format varchar(50),
-	title varchar(213),
+	title varchar(500),
 	author varchar(256),
   	publisher varchar(96)
 );

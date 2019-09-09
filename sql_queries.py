@@ -30,9 +30,9 @@ CREATE TABLE public.books (
 	asin varchar(256) NOT NULL,
 	"group" varchar(50),
 	format varchar(50),
-	title varchar(213),
+	title varchar(500),
 	author varchar(256),
-  	publisher varchar(96)
+  	publisher varchar(96))
 """)
 
 staging_books_copy = (f"""
@@ -43,4 +43,5 @@ region 'us-west-2'
 FORMAT AS CSV
 """)
 
+create_table_queries = [staging_books_table_create,]
 copy_table_queries = [staging_books_copy,]
