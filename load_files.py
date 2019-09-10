@@ -12,11 +12,16 @@ config.read_file(open("dwh.cfg"))
 KEY = config.get("AWS", "KEY")
 SECRET = config.get("AWS", "SECRET")
 
-def pre_process_csv(csv):
+def pre_process_csv(csv, outputname):
     # TODO: error with quotes within a field, those lines are getting skipped
     df = pd.read_csv(csv, error_bad_lines=False)
-    #df = pd.read_csv('Data/amazon-sales-rank-data-for-print-and-kindle-books/amazon_com_extras.csv', sep=",",quoting=csv.QUOTE_NONE,escapechar=".")
-    df.to_csv(f'Data/amazon-sales-rank-data-for-print-and-kindle-books/amazon_com_extras_processed.csv',index=False)
+    df.to_csv(outputname, index=False)
+
+def pre_process_reviews_csv(csv, outputname):
+    # TODO: error with quotes within a field, those lines are getting skipped
+    df = pd.read_csv(csv)
+    df = df.drop("Unnamed: 0", axis='columns')
+    df.to_csv(outputname, index=False)
 
 def upload_to_aws(local_file, bucket, s3_file):
     s3 = boto3.client('s3', aws_access_key_id=KEY,
@@ -32,6 +37,13 @@ def upload_to_aws(local_file, bucket, s3_file):
     except NoCredentialsError:
         print("Credentials not available")
         return False
+
+def drop_tables(cur, conn):
+    """Drops database tables in Redshift if they exist.
+    """
+    for query in drop_table_queries:
+        cur.execute(query)
+        conn.commit()
 
 def create_tables(cur, conn):
     """Creates database tables in Redshift.
@@ -63,13 +75,15 @@ def main():
     DWH_ENDPOINT = config.get("DWH", "DWH_ENDPOINT")
     DWH_ROLE_ARN = config.get("DWH", "DWH_ROLE_ARN")
 
-    pre_process_csv('Data/amazon-sales-rank-data-for-print-and-kindle-books/amazon_com_extras.csv')
+    pre_process_csv('Data/amazon-sales-rank-data-for-print-and-kindle-books/amazon_com_extras.csv','Data/processed/amazon_com_extras_processed.csv')
     uploaded = upload_to_aws('Data/amazon-sales-rank-data-for-print-and-kindle-books/amazon_com_extras_processed.csv', 'kindle-reviews-and-sales', 'books.csv')
+    pre_process_reviews_csv('Data/kindle-reviews/kindle_reviews.csv', 'Data/processed/kindle_reviews_processed.csv')
+# upload_to_aws('Data/kindle-reviews/kindle_reviews.csv', 'kindle-reviews-and-sales', 'reviews.csv')
 
     con = psycopg2.connect(f"dbname={DWH_DB} host={DWH_ENDPOINT} port={DWH_PORT} user={DWH_DB_USER} password={DWH_DB_PASSWORD}")
     cur = con.cursor()
 
-    drop_table_queries(cur, con)
+    drop_tables(cur, con)
     create_tables(cur, con)
     load_staging_tables(cur, con)
 

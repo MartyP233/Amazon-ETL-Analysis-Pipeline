@@ -22,9 +22,10 @@ DWH_ROLE_ARN = config.get("DWH", "DWH_ROLE_ARN")
 LOG_DATA = config.get("S3", "LOG_DATA")
 LOG_JSONPATH = config.get("S3", "LOG_JSONPATH")
 BOOK_DATA = config.get("S3", "BOOK_DATA")
+REVIEW_DATA = config.get("S3", "REVIEW_DATA")
 
 staging_books_table_drop = "DROP TABLE IF EXISTS public.books"
-staging_books_table_drop = "DROP TABLE IF EXISTS public.reviews"
+staging_books_reviews_drop = "DROP TABLE IF EXISTS public.reviews"
 time_table_drop = "DROP TABLE IF EXISTS public.time"
 
 staging_books_table_create = ("""
@@ -46,7 +47,7 @@ CREATE TABLE public.reviews (
 	summary varchar(256),
   	overall varchar(96),
 	unixReviewTime int,
-	reviewerName varchar(255)
+	reviewerName varchar(255),
 	reviewTime varchar (50))
 """)
 
@@ -76,6 +77,6 @@ region 'us-west-2'
 FORMAT AS CSV
 """)
 
-drop_table_queries = [staging_books_table_drop,]
-create_table_queries = [staging_books_table_create,staging_reviews_table_create,]
-copy_table_queries = [staging_books_copy,]
+drop_table_queries = [staging_books_table_drop, staging_books_reviews_drop, time_table_drop]
+create_table_queries = [staging_books_table_create, staging_reviews_table_create, time_table_create]
+copy_table_queries = [staging_books_copy, staging_reviews_copy] 
