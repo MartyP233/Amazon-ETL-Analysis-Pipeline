@@ -77,6 +77,14 @@ region 'us-west-2'
 FORMAT AS CSV
 """)
 
+salesrank_copy = (f"""
+COPY public.salesrank
+FROM {SALESRANK_PATH}
+credentials 'aws_iam_role={DWH_ROLE_ARN}'
+region 'us-west-2'
+FORMAT AS CSV
+""")
+
 drop_table_queries = [staging_books_table_drop, staging_books_reviews_drop, time_table_drop]
 create_table_queries = [staging_books_table_create, staging_reviews_table_create, time_table_create]
-copy_table_queries = [staging_books_copy, staging_reviews_copy] 
+copy_table_queries = [salesrank_copy, staging_books_copy, staging_reviews_copy] 

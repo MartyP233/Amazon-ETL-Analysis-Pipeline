@@ -32,12 +32,26 @@ group, format, title, author and publisher all contain some missing values
 not all book titles are unique
 there is a large number of different publishers, the most common publisher published 4% of books.
 
-Sales Rank data is present in multiple JSON files.
+Some rows contained double quotes within the double quoted fields which causes errors when loading using pandas, or into redshift. Because the analyis doesn't rely on every row of data and the number of rows affected was small, I decided to remove the rows in a pre processing step. 
+
+## Sales Rank data 
 
 # TODO: understand and desribe content and data quality of JSON files
 66760 JSON files, with ASIN in their filename and timestamp and salesranks as key value pairs within the json.
 
-asin's will need to be extracted from filename and created as a asin field
+To clean / prepare the data the asins need to be extracted from filename and created as a asin field within the data file.
+This is difficult due to the number and size of the files. I 2 main approaches:
+
+- In memory
+
+I tried pandas and dask locally, but ran into local memory constraints. If processing speed was a process requirement, a distributed
+computing environment with processing approaches such as spark or dask could provide the best solution.
+
+In memory options are in ![](process_salesrank_notused.py)
+
+- saving to disk
+
+I looped through the files, reading, process and then writing them out, to reduce the strain on the RAM. The process is slow, but reliable.
 
 ### Kindle Reviews Data
 The datasource consists of 1 csv file with kindle review data such as  ASIN, helpfullness of review, overall review, reviewtext review time etc.
@@ -48,6 +62,8 @@ ASIN is unique and contains no nulls
 Some review text has been flagged as mismatched by kaggle
 There are no missing values.
 Review times range beteen March 2000 and July 2014, with most data in the 2013-14 period.
+
+To clean the reviews data the index column needed to be removed.
 
 - Document steps necessary to clean the data
 
