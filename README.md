@@ -11,15 +11,13 @@ https://www.kaggle.com/ucffool/amazon-sales-rank-data-for-print-and-kindle-books
 
 The two datasets can be modelled together based on the common identifier ASIN, which is Amazon's unique identifier.
 
-The reviews data was created bu Julian McAuley from UCSD to support recommender systems research. http://jmcauley.ucsd.edu/data/amazon/ . 
-
 ### Purpose of the data model
 
-I aim to model the data to support data analysis in areas such as:
+I aim to model the data to support data analysis for:
 
 - sentiment analysis of reviews
-- analyse correlation of reviews and sales metrics
-- highest rated and best selling kindle products.
+- correlation of reviews and sales metrics
+- analysing highest rated and best selling kindle products.
 
 My data analysis model will be a star schmea, to create flexiblity and simplicity for carrying out data analysis. 
 
@@ -55,9 +53,14 @@ In memory options are in ![](process_salesrank_notused.py)
 I looped through the files, reading, process and then writing them out, to reduce the strain on the RAM. The process is slow, but reliable.
 
 ### Kindle Reviews Data
+
+The reviews data was created bu Julian McAuley from UCSD to support recommender systems research. http://jmcauley.ucsd.edu/data/amazon/ . 
+
 The datasource consists of 1 csv file with kindle review data such as  ASIN, helpfullness of review, overall review, reviewtext review time etc.
 
-It is a very large csv, with 983K rows. Some observations of the data:
+Some observations of the data:
+
+It is a very large csv, with 983K rows.
 
 ASIN is unique and contains no nulls
 Some review text has been flagged as mismatched by kaggle
@@ -79,14 +82,25 @@ I have chosen a star schema, as it will support analysts to write analytical que
 normalize the data further, for example I would split reviewer id and name into a seperate table, to remove some redundancy.
 
 ### TODO: Plan ETL pipeline
-# TODO: List the steps necessary to pipeline the data into the chosen data model
-# TODO: add one more level of detail to the bullet points below
+### TODO: List the steps necessary to pipeline the data into the chosen data model
+### TODO: add one more level of detail to the bullet points below
 The major steps of the process are:
 
-- downloading the data from the source
-- pre processing / cleaning the data
-- loading the data (to s3 and redshift)
-- post load transformations
+### downloading the data from the source
+
+*download_data.py - download the files from source and unzip the data*
+### pre processing / cleaning the data
+
+*pre_process_files.py - clean and prepocess the data files locally in preperation for loading the data to S3*
+
+### Establish the redshift database
+
+*create-redshift-cluster.py - uses boto to establish a redshift cluster*
+
+### loading the data (to s3 and redshift)
+*uploads files to S3, creates database tables and copies data into the redshift tables*
+### post load transformations
+*transforms data into star schema, setups the time table data*
 
 - Include this thinking for the project writeup:
 # TODO: Clearly state the rationale for the choice of tools and technologies for the project.
