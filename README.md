@@ -11,6 +11,8 @@ https://www.kaggle.com/ucffool/amazon-sales-rank-data-for-print-and-kindle-books
 
 The two datasets can be modelled together based on the common identifier ASIN, which is Amazon's unique identifier.
 
+The reviews data was created bu Julian McAuley from UCSD to support recommender systems research. http://jmcauley.ucsd.edu/data/amazon/ . 
+
 ### Purpose of the data model
 
 I aim to model the data to support data analysis in areas such as:
@@ -19,7 +21,7 @@ I aim to model the data to support data analysis in areas such as:
 - analyse correlation of reviews and sales metrics
 - highest rated and best selling kindle products.
 
-My data analysis model will be a star / snowflake schema, to create flexiblity and simplicity for carrying out data analysis. 
+My data analysis model will be a star schmea, to create flexiblity and simplicity for carrying out data analysis. 
 
 ## Exploratory Data Analysis
 
@@ -34,9 +36,8 @@ there is a large number of different publishers, the most common publisher publi
 
 Some rows contained double quotes within the double quoted fields which causes errors when loading using pandas, or into redshift. Because the analyis doesn't rely on every row of data and the number of rows affected was small, I decided to remove the rows in a pre processing step. 
 
-## Sales Rank data 
+### Sales Rank data 
 
-# TODO: understand and desribe content and data quality of JSON files
 66760 JSON files, with ASIN in their filename and timestamp and salesranks as key value pairs within the json.
 
 To clean / prepare the data the asins need to be extracted from filename and created as a asin field within the data file.
@@ -74,16 +75,23 @@ To clean the reviews data the index column needed to be removed.
 
 ![ERD](media/erd.png)
 
-I have chosen a snowflake schema, as it will support analysts to write analytical queries in less complex ways with less joins required. There is is some redundancy in the data as a consequence, which in this case is fine. In a web app backend I would 
-normalize the data further.
+I have chosen a star schema, as it will support analysts to write analytical queries in less complex ways with less joins required. There is is some redundancy in the data as a consequence, which in this case is fine. In a web app backend I would 
+normalize the data further, for example I would split reviewer id and name into a seperate table, to remove some redundancy.
 
 ### TODO: Plan ETL pipeline
-- List the steps necessary to pipeline the data into the chosen data model
+# TODO: List the steps necessary to pipeline the data into the chosen data model
+# TODO: add one more level of detail to the bullet points below
+The major steps of the process are:
+
+- downloading the data from the source
+- pre processing / cleaning the data
+- loading the data (to s3 and redshift)
+- post load transformations
+
 - Include this thinking for the project writeup:
-Clearly state the rationale for the choice of tools and technologies for the project.
+# TODO: Clearly state the rationale for the choice of tools and technologies for the project.
 *RUBRIC The choice of tools, technologies, and data model are justified well*
-Document the steps of the process.
-Propose how often the data should be updated and why.
+# TODO: Propose how often the data should be updated and why.
 
 ## The ETL pipeline
 
