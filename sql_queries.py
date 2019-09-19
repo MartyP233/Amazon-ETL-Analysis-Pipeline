@@ -23,6 +23,7 @@ LOG_DATA = config.get("S3", "LOG_DATA")
 LOG_JSONPATH = config.get("S3", "LOG_JSONPATH")
 BOOK_DATA = config.get("S3", "BOOK_DATA")
 REVIEW_DATA = config.get("S3", "REVIEW_DATA")
+SALESRANK_PATH = config.get("S3", "SALESRANK_PATH")
 
 staging_books_table_drop = "DROP TABLE IF EXISTS public.books"
 staging_books_reviews_drop = "DROP TABLE IF EXISTS public.reviews"

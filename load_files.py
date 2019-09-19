@@ -5,6 +5,7 @@ from sql_queries import copy_table_queries, create_table_queries, drop_table_que
 import psycopg2
 import pandas as pd
 import csv
+import os
 
 config = configparser.ConfigParser()
 config.read_file(open("dwh.cfg"))
@@ -66,12 +67,16 @@ def main():
     DWH_ROLE_ARN = config.get("DWH", "DWH_ROLE_ARN")
 
     # load files to s3
-    upload_to_aws('Data/amazon-sales-rank-data-for-print-and-kindle-books/amazon_com_extras_processed.csv', 'kindle-reviews-and-sales', 'books.csv')
-    upload_to_aws('Data/kindle-reviews/kindle_reviews.csv', 'kindle-reviews-and-sales', 'reviews.csv')
+    print("Loading books to s3...")
+    # upload_to_aws('Data/processed/amazon_com_extras_processed.csv', 'kindle-reviews-and-sales', 'books.csv')
 
-    files = os.listdir('Data/ranks_norm/processed')
+    print("Loading reviews to s3...")
+    # upload_to_aws('Data/processed/kindle_reviews_processed.csv', 'kindle-reviews-and-sales', 'reviews.csv')
+
+    print("Loading salesranks to s3...")
+    files = os.listdir('Data/processed/ranks_norm/')
     for file in files:
-        upload_to_aws(file, 'kindle-reviews-and-sales', file)
+        upload_to_aws(f"Data/processed/ranks_norm/{file}", 'kindle-reviews-and-sales', f"ranks_norm/{file}")
 
     # load files from s3 to redshift
     con = psycopg2.connect(f"dbname={DWH_DB} host={DWH_ENDPOINT} port={DWH_PORT} user={DWH_DB_USER} password={DWH_DB_PASSWORD}")

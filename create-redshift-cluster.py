@@ -82,10 +82,8 @@ def create_cluster():
         )
     except Exception as e:
         print(e)
-    
-    myCluster = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
 
-    return myCluster
+    return redshift, DWH_CLUSTER_IDENTIFIER
 
 def prettyRedshiftProps(props):
     """Get the status of the cluster.
@@ -130,14 +128,15 @@ def set_cluster_config():
 
 def main():
 
-    myCluster = create_cluster()
-    
+    redshift, DWH_CLUSTER_IDENTIFIER = create_cluster()
+    myCluster = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
     state = prettyRedshiftProps(myCluster).loc[[2]].Value.any()
 
     print(f'Launching Cluster. Cluster Status is {state}')
 
     while state != 'available':
         time.sleep(60)
+        myCluster = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
         state = prettyRedshiftProps(myCluster).loc[[2]].Value.any()
         print(f'Cluster Status is {state}')
     
