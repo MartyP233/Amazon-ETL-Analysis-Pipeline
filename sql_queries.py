@@ -28,6 +28,7 @@ SALESRANK_PATH = config.get("S3", "SALESRANK_PATH")
 staging_books_table_drop = "DROP TABLE IF EXISTS public.books"
 staging_books_reviews_drop = "DROP TABLE IF EXISTS public.reviews"
 time_table_drop = "DROP TABLE IF EXISTS public.time"
+salesrank_table_drop = "DROP TABLE IF EXISTS public.salesrank"
 
 staging_books_table_create = ("""
 CREATE TABLE public.books (
@@ -43,11 +44,11 @@ staging_reviews_table_create = ("""
 CREATE TABLE public.reviews (
 	asin varchar(256) NOT NULL,
 	reviewerid varchar(50),
-	reviewText varchar(50),
+	reviewText varchar(4000),
 	helpful varchar(500),
 	summary varchar(256),
   	overall varchar(96),
-	unixReviewTime int,
+	unixReviewTime varchar(96),
 	reviewerName varchar(255),
 	reviewTime varchar (50))
 """)
@@ -60,6 +61,12 @@ CREATE TABLE IF NOT EXISTS time (start_time timestamp PRIMARY KEY
                                 ,month int
                                 ,year int
                                 ,weekday int);
+""")
+
+salesrank_table_create = ("""
+CREATE TABLE IF NOT EXISTS salesrank (timestamp varchar(256)
+								,rank varchar(256)
+								,asin varchar(256));
 """)
 
 staging_books_copy = (f"""
@@ -76,6 +83,7 @@ FROM {REVIEW_DATA}
 credentials 'aws_iam_role={DWH_ROLE_ARN}'
 region 'us-west-2'
 FORMAT AS CSV
+TRUNCATECOLUMNS
 """)
 
 salesrank_copy = (f"""
@@ -86,6 +94,6 @@ region 'us-west-2'
 FORMAT AS CSV
 """)
 
-drop_table_queries = [staging_books_table_drop, staging_books_reviews_drop, time_table_drop]
-create_table_queries = [staging_books_table_create, staging_reviews_table_create, time_table_create]
+drop_table_queries = [staging_books_table_drop, staging_books_reviews_drop, time_table_drop, salesrank_table_drop]
+create_table_queries = [staging_books_table_create, staging_reviews_table_create, time_table_create, salesrank_table_create]
 copy_table_queries = [salesrank_copy, staging_books_copy, staging_reviews_copy] 

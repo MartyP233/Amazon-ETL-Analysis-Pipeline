@@ -19,7 +19,7 @@ I aim to model the data to support data analysis for:
 - correlation of reviews and sales metrics
 - analysing highest rated and best selling kindle products.
 
-My data analysis model will be a star schmea, to create flexiblity and simplicity for carrying out data analysis. 
+My data analysis model will be a star schema, to create flexiblity and simplicity for carrying out data analysis. 
 
 ## Exploratory Data Analysis
 
@@ -27,10 +27,10 @@ My data analysis model will be a star schmea, to create flexiblity and simplicit
 
 The datasource consists of 2 csv files, with around 60-70k rows containing information about the books such as the identifier, the group, format, title, author and publisher. Data quality initially looks good. Some observations:
 
-unique identifier contains no nulls and is unique
-group, format, title, author and publisher all contain some missing values
-not all book titles are unique
-there is a large number of different publishers, the most common publisher published 4% of books.
+- unique identifier contains no nulls and is unique
+- group, format, title, author and publisher all contain some missing values
+- not all book titles are unique
+- there is a large number of different publishers, the most common publisher published 4% of books.
 
 Some rows contained double quotes within the double quoted fields which causes errors when loading using pandas, or into redshift. Because the analyis doesn't rely on every row of data and the number of rows affected was small, I decided to remove the rows in a pre processing step. 
 
@@ -73,49 +73,43 @@ To clean the reviews data the index column needed to be removed.
 
 ## The Data Model
 
-### TODO: Design and document the data model
-- Map out the conceptual data model and explain why you chose that model
-
 ![ERD](media/erd.png)
 
 I have chosen a star schema, as it will support analysts to write analytical queries in less complex ways with less joins required. There is is some redundancy in the data as a consequence, which in this case is fine. In a web app backend I would 
 normalize the data further, for example I would split reviewer id and name into a seperate table, to remove some redundancy.
 
-### TODO: Plan ETL pipeline
-### TODO: List the steps necessary to pipeline the data into the chosen data model
-### TODO: add one more level of detail to the bullet points below
+## The ETL pipeline
+
 The major steps of the process are:
 
-### downloading the data from the source
-
 *download_data.py - download the files from source and unzip the data*
-### pre processing / cleaning the data
 
 *pre_process_files.py - clean and prepocess the data files locally in preperation for loading the data to S3*
 
-### Establish the redshift database
-
 *create-redshift-cluster.py - uses boto to establish a redshift cluster*
 
-### loading the data (to s3 and redshift)
-*uploads files to S3, creates database tables and copies data into the redshift tables*
-### post load transformations
-*transforms data into star schema, setups the time table data*
+*load_files.py - uploads files to S3, creates database tables and copies data into the redshift tables*
+
+*transform.py - transforms data into star schema, setups the time table data*
 
 - Include this thinking for the project writeup:
-# TODO: Clearly state the rationale for the choice of tools and technologies for the project.
-*RUBRIC The choice of tools, technologies, and data model are justified well*
+
+## Project Writeup
+
+Tools and Technology
+
+python - I chose straight python for my pre-processing as I prefer working in a local environment, and wanted to implement a python data processing package from scratch. The dataset was getting to the point where a distributed computing envrionment would be neccessary, but in the end, a single computer setup sufficed. 
+
+redshift - I chose redshift as the datastore for this project as i designed a relational data model with flexibility to handle a range of analytical queries.
+
 # TODO: Propose how often the data should be updated and why.
 
-## The ETL pipeline
+The dataset was created by individuals who extracted the data from amazon on a regular basis and had created large datasets. This means data updates could be implemented in bulk as a result of those individuals running a new batch.
 
-### TODO: Create the data pipelines and the data model
-# create redshift db
-# create tables
-# load data
-# transform
+If the data needed to be updated more regularly, i would redesign the pipeline to connect directly to the amazon source, for example if an api was available, daily updates could provide fresh data.
 
 ### TODO: Create a data dictionary
+
 ### TODO: Create and Run data quality checks to ensure the pipeline ran as expected
 - Integrity constraints on the relational database (e.g., unique key, data type, etc.)
 - Unit tests for the scripts to ensure they are doing the right thing

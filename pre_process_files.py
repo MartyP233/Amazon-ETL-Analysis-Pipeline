@@ -14,7 +14,7 @@ def pre_process_salesrank(input_path, output_path):
     if not os.path.exists(output_path):
         os.mkdir(output_path)
 
-    seq = [i for i in range(1669, 66760+1, 1669)]
+    seq = [i for i in range(40, 66760+1, 40)]
     
     big_df =  pd.DataFrame(columns=['asin', 'rank'])
     
