@@ -106,6 +106,8 @@ redshift - I chose redshift as the datastore for this project as i designed a re
 
 The dataset was created by individuals who extracted the data from amazon on a regular basis and had created large datasets. This means data updates could be implemented in bulk as a result of those individuals running a new batch.
 
+It was largely generated for research purposes as an analytical dataset, so updates would likely be rare.
+
 If the data needed to be updated more regularly, i would redesign the pipeline to connect directly to the amazon source, for example if an api was available, daily updates could provide fresh data.
 
 ### TODO: Create a data dictionary
@@ -118,8 +120,7 @@ If the data needed to be updated more regularly, i would redesign the pipeline t
 ## Project Writeup
 
 - What's the goal? What queries will you want to run? How would Spark or Airflow be incorporated? Why did you choose the model you chose?
-- Clearly state the rationale for the choice of tools and technologies for the project.
-    *RUBRIC The choice of tools, technologies, and data model are justified well*
+
 - Document the steps of the process.
 - Propose how often the data should be updated and why.
 

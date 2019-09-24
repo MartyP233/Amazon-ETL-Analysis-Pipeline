@@ -22,7 +22,7 @@ import zipfile
 # requests.post(zip_file_url, data=payload)
 # r = requests.get(zip_file_url)
 # z = zipfile.ZipFile(io.BytesIO(r.content))
-# z.extract('kindle_reviews.csv', path='Data/')
+# z.extract('kindle_reviews.csv', path='../Data/')
 
 # unzip local file
 
@@ -33,14 +33,14 @@ def unzip_file(zip_file, filename, directory):
         print(f'Finished extracting {filename} at {result}')
 
 def main():
-    unzip_file('Data/downloads/kindle-reviews.zip', 'kindle_reviews.csv', 'Data/unzipped/')
-    unzip_file('Data/downloads/amazon-sales-rank-data-for-print-and-kindle-books.zip', 'amazon_com_extras.csv', 'Data/unzipped/')
-    unzip_file('Data/downloads/amazon-sales-rank-data-for-print-and-kindle-books.zip', 'ranks_norm.zip', 'Data/unzipped/')
+    unzip_file('../Data/downloads/kindle-reviews.zip', 'kindle_reviews.csv', '../Data/unzipped/')
+    unzip_file('../Data/downloads/amazon-sales-rank-data-for-print-and-kindle-books.zip', 'amazon_com_extras.csv', '../Data/unzipped/')
+    unzip_file('../Data/downloads/amazon-sales-rank-data-for-print-and-kindle-books.zip', 'ranks_norm.zip', '../Data/unzipped/')
 
-    zip_file = 'Data/unzipped/ranks_norm.zip'
+    zip_file = '../Data/unzipped/ranks_norm.zip'
     with zipfile.ZipFile(zip_file, 'r') as file:
         print(f"Extracting {zip_file}...")
-        file.extractall(path='Data/unzipped/')
+        file.extractall(path='../Data/unzipped/')
 
 if __name__ == "__main__":
     main()

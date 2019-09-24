@@ -54,7 +54,7 @@ CREATE TABLE public.reviews (
 """)
 
 time_table_create = ("""
-CREATE TABLE IF NOT EXISTS time (start_time timestamp PRIMARY KEY
+CREATE TABLE IF NOT EXISTS time (start_time datetime PRIMARY KEY
                                 ,hour int
                                 ,day int
                                 ,week int
