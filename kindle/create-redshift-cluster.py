@@ -9,7 +9,7 @@ def create_cluster():
 
         # import env vars
     config = configparser.ConfigParser()
-    config.read_file(open("dwh.cfg"))
+    config.read_file(open("kindle/dwh.cfg"))
 
     KEY = config.get("AWS", "KEY")
     SECRET = config.get("AWS", "SECRET")
@@ -106,7 +106,7 @@ def set_cluster_config():
     config['DWH']['DWH_ENDPOINT'] = DWH_ENDPOINT
     config['DWH']['DWH_ROLE_ARN'] = DWH_ROLE_ARN
 
-    with open('dwh.cfg', 'w') as configfile:
+    with open('kindle/dwh.cfg', 'w') as configfile:
         config.write(configfile)
 
     # Open incoming TCP port to access cluster endpoint

@@ -20,7 +20,7 @@ def remove_cluster():
 
     # import env vars
     config = configparser.ConfigParser()
-    config.read_file(open("dwh.cfg"))
+    config.read_file(open("kindle/dwh.cfg"))
 
     KEY = config.get("AWS", "KEY")
     SECRET = config.get("AWS", "SECRET")

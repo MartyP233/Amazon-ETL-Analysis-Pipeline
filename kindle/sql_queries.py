@@ -3,7 +3,7 @@ import configparser
 
 # CONFIG
 config = configparser.ConfigParser()
-config.read('dwh.cfg')
+config.read('kindle/dwh.cfg')
 
 KEY = config.get("AWS", "KEY")
 SECRET = config.get("AWS", "SECRET")

@@ -1,14 +1,14 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
 import configparser
-from sql_queries import copy_table_queries, create_table_queries, drop_table_queries
+from kindle.sql_queries import copy_table_queries, create_table_queries, drop_table_queries
 import psycopg2
 import pandas as pd
 import csv
 import os
 
 config = configparser.ConfigParser()
-config.read_file(open("dwh.cfg"))
+config.read_file(open("kindle/dwh.cfg"))
 
 KEY = config.get("AWS", "KEY")
 SECRET = config.get("AWS", "SECRET")
@@ -54,7 +54,7 @@ def load_staging_tables(cur, conn):
 
 def main():
     config = configparser.ConfigParser()
-    config.read_file(open("dwh.cfg"))
+    config.read_file(open("kindle/dwh.cfg"))
 
     KEY = config.get("AWS", "KEY")
     SECRET = config.get("AWS", "SECRET")
