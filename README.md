@@ -69,8 +69,6 @@ Review times range beteen March 2000 and July 2014, with most data in the 2013-1
 
 To clean the reviews data the index column needed to be removed.
 
-- Document steps necessary to clean the data
-
 ## The Data Model
 
 ![ERD](media/erd.png)
@@ -80,6 +78,7 @@ normalize the data further, for example I would split reviewer id and name into 
 
 ## The ETL pipeline
 
+To start the pipeline, run python 
 The major steps of the process are:
 
 *download_data.py - download the files from source and unzip the data*
@@ -92,15 +91,13 @@ The major steps of the process are:
 
 *transform.py - transforms data into star schema, setups the time table data*
 
-- Include this thinking for the project writeup:
-
 ## Project Writeup
 
 Tools and Technology
 
 python - I chose straight python for my pre-processing as I prefer working in a local environment, and wanted to implement a python data processing package from scratch. The dataset was getting to the point where a distributed computing envrionment would be neccessary, but in the end, a single computer setup sufficed. 
 
-redshift - I chose redshift as the datastore for this project as i designed a relational data model with flexibility to handle a range of analytical queries.
+redshift - I chose redshift as the datastore for this project as i needed a relational data store to have the flexibility to handle a range of analytical queries.
 
 # TODO: Propose how often the data should be updated and why.
 
@@ -110,8 +107,6 @@ It was largely generated for research purposes as an analytical dataset, so upda
 
 If the data needed to be updated more regularly, i would redesign the pipeline to connect directly to the amazon source, for example if an api was available, daily updates could provide fresh data.
 
-### TODO: Create a data dictionary
-
 ### TODO: Create and Run data quality checks to ensure the pipeline ran as expected
 - Integrity constraints on the relational database (e.g., unique key, data type, etc.)
 - Unit tests for the scripts to ensure they are doing the right thing
@@ -119,10 +114,7 @@ If the data needed to be updated more regularly, i would redesign the pipeline t
 
 ## Project Writeup
 
-- What's the goal? What queries will you want to run? How would Spark or Airflow be incorporated? Why did you choose the model you chose?
-
 - Document the steps of the process.
-- Propose how often the data should be updated and why.
 
 ## Scenarios
 

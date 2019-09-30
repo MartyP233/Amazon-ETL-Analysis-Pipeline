@@ -51,12 +51,12 @@ def pre_process_reviews(csv, outputname):
 
 
 def main():
-    print("Processing salesrank data")
-    pre_process_salesrank('../Data/unzipped/ranks_norm','../Data//processed/ranks_norm')
-    print("Processing books data")
-    pre_process_books('../Data/unzipped/amazon_com_extras.csv','../Data/processed/amazon_com_extras_processed.csv')
-    print("Processing reviews data")
-    pre_process_reviews('../Data/unzipped/kindle_reviews.csv', '../Data/processed/kindle_reviews_processed.csv')
+    print("Processing salesrank data...")
+    pre_process_salesrank('Data/unzipped/ranks_norm','Data//processed/ranks_norm')
+    print("Processing books data...")
+    pre_process_books('Data/unzipped/amazon_com_extras.csv','Data/processed/amazon_com_extras_processed.csv')
+    print("Processing reviews data...")
+    pre_process_reviews('Data/unzipped/kindle_reviews.csv', 'Data/processed/kindle_reviews_processed.csv')
 
 if __name__ == "__main__":
     main()

@@ -6,8 +6,9 @@ import configparser
 import time
 
 def create_cluster():
-
-        # import env vars
+    """Create redshift cluster.
+    """
+    # import env vars
     config = configparser.ConfigParser()
     config.read_file(open("kindle/dwh.cfg"))
 
