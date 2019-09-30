@@ -43,10 +43,11 @@ def pre_process_books(csv, outputname):
 
 
 def pre_process_reviews(csv, outputname):
-    """Process reviews csv, removing index row.
+    """Removes index and converts timestamp.
     """
     df = pd.read_csv(csv)
     df = df.drop("Unnamed: 0", axis='columns')
+    df['unixReviewTime'] = pd.to_datetime(df['unixReviewTime'],unit='s')
     df.to_csv(outputname, index=False)
 
 
