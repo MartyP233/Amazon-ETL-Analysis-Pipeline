@@ -9,4 +9,5 @@ Scenarios questions in readme
 - test 'launch process' facility
 - transform data into time table
 - Create a data dictionary
+- fix data formats in pipeline
 
