@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
 import configparser
-from kindle.sql_queries import copy_table_queries, create_table_queries, drop_table_queries
+from sql_queries import copy_table_queries, create_table_queries, drop_table_queries
 import psycopg2
 import pandas as pd
 import csv
@@ -74,9 +74,9 @@ def main():
     # upload_to_aws('Data/processed/kindle_reviews_processed.csv', 'kindle-reviews-and-sales', 'reviews.csv')
 
     print("Loading salesranks to s3...")
-    files = os.listdir('Data/processed/ranks_norm/')
-    for file in files:
-        upload_to_aws(f"Data/processed/ranks_norm/{file}", 'kindle-reviews-and-sales', f"ranks_norm/{file}")
+    # files = os.listdir('Data/processed/ranks_norm/')
+    # for file in files:
+    #     upload_to_aws(f"Data/processed/ranks_norm/{file}", 'kindle-reviews-and-sales', f"ranks_norm/{file}")
 
     # load files from s3 to redshift
     con = psycopg2.connect(f"dbname={DWH_DB} host={DWH_ENDPOINT} port={DWH_PORT} user={DWH_DB_USER} password={DWH_DB_PASSWORD}")

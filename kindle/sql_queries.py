@@ -54,7 +54,7 @@ CREATE TABLE public.reviews (
 """)
 
 time_table_create = ("""
-CREATE TABLE IF NOT EXISTS time (start_time datetime PRIMARY KEY
+CREATE TABLE IF NOT EXISTS time (ts TIMESTAMP PRIMARY KEY
                                 ,hour int
                                 ,day int
                                 ,week int
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS time (start_time datetime PRIMARY KEY
 """)
 
 salesrank_table_create = ("""
-CREATE TABLE IF NOT EXISTS salesrank (timestamp varchar(256)
+CREATE TABLE IF NOT EXISTS salesrank (ts TIMESTAMP
 								,rank varchar(256)
 								,asin varchar(256));
 """)
@@ -92,6 +92,25 @@ FROM {SALESRANK_PATH}
 credentials 'aws_iam_role={DWH_ROLE_ARN}'
 region 'us-west-2'
 FORMAT AS CSV
+""")
+
+# INSERT DATA INTO FINAL TABLES
+
+time_table_insert = ("""
+INSERT INTO time (start_time, hour, day, week, month, year, weekday)
+
+SELECT ts AS start_time
+,extract(hour from ts) AS hour
+,extract(day from ts) AS day
+,extract(week from ts) AS week
+,extract(month from ts) AS month
+,extract(year from ts) AS year
+,extract(weekday from ts) AS weekday
+
+FROM (
+
+select timestamp 'epoch' + ts * interval '0.001 second' AS ts
+FROM salesrank )
 """)
 
 drop_table_queries = [staging_books_table_drop, staging_books_reviews_drop, time_table_drop, salesrank_table_drop]
