@@ -78,10 +78,19 @@ normalize the data further, for example I would split reviewer id and name into 
 
 ## The ETL pipeline
 
-To start the pipeline, run python 
+The pipeline requires the zipped data to be downloaded. The Data folder should be setup as follows:
+
+/Data
+./downloads (contains the downloaded zip files)
+./processed (empty)
+./test_files (contains a test_upload.csv and a testzip.zip file)
+./unzipped (empty)
+
+To start the pipeline, run python start_etl.py
+
 The major steps of the process are:
 
-*download_data.py - download the files from source and unzip the data*
+*unzip_data.py - unzips the data in preparataion for preprocessing*
 
 *pre_process_files.py - clean and prepocess the data files locally in preperation for loading the data to S3*
 
@@ -93,13 +102,11 @@ The major steps of the process are:
 
 ## Project Writeup
 
-Tools and Technology
+### Tools and Technology
 
 python - I chose straight python for my pre-processing as I prefer working in a local environment, and wanted to implement a python data processing package from scratch. The dataset was getting to the point where a distributed computing envrionment would be neccessary, but in the end, a single computer setup sufficed. 
 
 redshift - I chose redshift as the datastore for this project as i needed a relational data store to have the flexibility to handle a range of analytical queries.
-
-# TODO: Propose how often the data should be updated and why.
 
 The dataset was created by individuals who extracted the data from amazon on a regular basis and had created large datasets. This means data updates could be implemented in bulk as a result of those individuals running a new batch.
 
@@ -107,16 +114,17 @@ It was largely generated for research purposes as an analytical dataset, so upda
 
 If the data needed to be updated more regularly, i would redesign the pipeline to connect directly to the amazon source, for example if an api was available, daily updates could provide fresh data.
 
-### TODO: Create and Run data quality checks to ensure the pipeline ran as expected
-- Integrity constraints on the relational database (e.g., unique key, data type, etc.)
-- Unit tests for the scripts to ensure they are doing the right thing
-- Source/count checks to ensure completeness
+###  Data quality checks
 
-## Project Writeup
+- Integrity constraints have been setup in the relational database (e.g., unique key, data type, etc.)
+- Unit tests have been setup in test.py to ensure they are doing the right thing, more would be created as the process matures.
+- Source/count checks are present in load_files.py in the row_count_test function.
 
-- Document the steps of the process.
+### Data Dictionary
 
-## Scenarios
+A Data dictionary is present in docs.
+
+### Scenarios
 
 - If the data was increased by 100x
 

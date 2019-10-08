@@ -37,7 +37,6 @@ def pre_process_salesrank(input_path, output_path):
 def pre_process_books(csv, outputname):
     """Process books csv, removes rows with extra quotes.
     """
-    # TODO: error with quotes within a field, those lines are getting skipped
     df = pd.read_csv(csv, error_bad_lines=False, encoding = "ISO-8859-1")
     df.to_csv(outputname, index=False)
 
