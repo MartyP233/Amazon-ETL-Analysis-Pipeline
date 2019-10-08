@@ -20,7 +20,7 @@ def pre_process_salesrank(input_path, output_path):
     
     for asin, filename in zip(asins, files):
             try:
-                df = pd.read_json(os.path.join(input_path, filename), typ='series')
+                df = pd.read_json(os.path.join(input_path, filename), typ='series', convert_axes=False)
                 df = df.to_frame(name='rank')
                 df = df.assign(asin=asin)
                 big_df = big_df.append(df, sort=False)
@@ -29,7 +29,7 @@ def pre_process_salesrank(input_path, output_path):
                 print(f"failed to process {filename}")
                 continue
             if asins.index(asin) in seq:
-                        big_df.index.name = 'timestamp'
+                        big_df.index.name = 'ts'
                         big_df.to_csv(f"{output_path}/{asins.index(asin)}.csv")
                         print(asins.index(asin))
                         big_df =  pd.DataFrame(columns=['asin', 'rank'])
@@ -38,7 +38,7 @@ def pre_process_books(csv, outputname):
     """Process books csv, removes rows with extra quotes.
     """
     # TODO: error with quotes within a field, those lines are getting skipped
-    df = pd.read_csv(csv, error_bad_lines=False)
+    df = pd.read_csv(csv, error_bad_lines=False, encoding = "ISO-8859-1")
     df.to_csv(outputname, index=False)
 
 
@@ -47,7 +47,6 @@ def pre_process_reviews(csv, outputname):
     """
     df = pd.read_csv(csv)
     df = df.drop("Unnamed: 0", axis='columns')
-    df['unixReviewTime'] = pd.to_datetime(df['unixReviewTime'],unit='s')
     df.to_csv(outputname, index=False)
 
 

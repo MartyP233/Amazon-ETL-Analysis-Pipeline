@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import NoCredentialsError
 import configparser
-from sql_queries import copy_table_queries, create_table_queries, drop_table_queries
+from kindle.sql_queries import copy_table_queries, create_table_queries, drop_table_queries
 import psycopg2
 import pandas as pd
 import csv
@@ -15,6 +15,8 @@ SECRET = config.get("AWS", "SECRET")
 
 
 def upload_to_aws(local_file, bucket, s3_file):
+    """Uploads a local file to s3.
+    """
     s3 = boto3.client('s3', aws_access_key_id=KEY,
                       aws_secret_access_key=SECRET)
 
@@ -50,7 +52,18 @@ def load_staging_tables(cur, conn):
     for query in copy_table_queries:
         cur.execute(query)
         conn.commit()
-
+    
+def row_count_test(cur, con, csv, dbtable):
+    """Compare csv rowcount with the loaded database table.
+    """
+    df = pd.read_csv(csv)
+    csvrows = len(df) + 1
+    cur.execute(f"SELECT COUNT(*) FROM {dbtable}")
+    tablerows = cur.fetchone()
+    if csvrows == tablerows[0]:
+        print(f"Row counts match for {csv} and {dbtable}")
+    else:
+        print(f"Row counts don't match for {csv} and {dbtable}")
 
 def main():
     config = configparser.ConfigParser()
@@ -68,15 +81,15 @@ def main():
 
     # load files to s3
     print("Loading books to s3...")
-    # upload_to_aws('Data/processed/amazon_com_extras_processed.csv', 'kindle-reviews-and-sales', 'books.csv')
+    upload_to_aws('Data/processed/amazon_com_extras_processed.csv', 'kindle-reviews-and-sales', 'books.csv')
 
     print("Loading reviews to s3...")
-    # upload_to_aws('Data/processed/kindle_reviews_processed.csv', 'kindle-reviews-and-sales', 'reviews.csv')
+    upload_to_aws('Data/processed/kindle_reviews_processed.csv', 'kindle-reviews-and-sales', 'reviews.csv')
 
     print("Loading salesranks to s3...")
-    # files = os.listdir('Data/processed/ranks_norm/')
-    # for file in files:
-    #     upload_to_aws(f"Data/processed/ranks_norm/{file}", 'kindle-reviews-and-sales', f"ranks_norm/{file}")
+    files = os.listdir('Data/processed/ranks_norm/')
+    for file in files:
+        upload_to_aws(f"Data/processed/ranks_norm/{file}", 'kindle-reviews-and-sales', f"ranks_norm/{file}")
 
     # load files from s3 to redshift
     con = psycopg2.connect(f"dbname={DWH_DB} host={DWH_ENDPOINT} port={DWH_PORT} user={DWH_DB_USER} password={DWH_DB_PASSWORD}")
@@ -85,6 +98,10 @@ def main():
     drop_tables(cur, con)
     create_tables(cur, con)
     load_staging_tables(cur, con)
+
+    # Data quality checks
+    row_count_test(cur, con, 'Data/processed/amazon_com_extras_processed.csv', 'books')
+    row_count_test(cur, con, 'Data/processed/kindle_reviews_processed.csv', 'reviews')
 
 if __name__ == "__main__":
     main()

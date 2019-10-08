@@ -118,6 +118,18 @@ If the data needed to be updated more regularly, i would redesign the pipeline t
 
 ## Scenarios
 
-- If the data was increased by 100x.
+- If the data was increased by 100x
+
+Large CSV files such as the review and books csv would not be able to read into memory for preprocessing and analytics on large scale tables would also be slow.
+
+The data would need to be partioned into multiple files and could be processed or analysed using spark. A data lake infrastrucutre is designed to support this type of design. 
+
+The salesrank data could still be processed using the current setup, although would take a long time. I would change the code to use spark instead of raw python and move to a distributed computing environment to take advantage of parrallel processing to improve performance.
+
 - If the pipelines were run on a daily basis by 7am.
+
+I would use a workflow scheduler such as luigi or airflow to schedule the work. Airflow can handle data quality checks reporting and provides audit information for keeping track of data lineage issues.
+
 - If the database needed to be accessed by 100+ people.
+
+I would ensure there was enough compute and memory resource available to the cluster my those metrics, and scaling up if neccessary. If scaling up didnt work well, I would change the architecture of the data storage to allow for a distributed computing environment. Setups such as a data lake setup would allow this. I could then scale out my processing and memory to support the number of users.

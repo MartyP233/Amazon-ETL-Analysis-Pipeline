@@ -48,7 +48,7 @@ CREATE TABLE public.reviews (
 	helpful varchar(500),
 	summary varchar(256),
   	overall varchar(96),
-	unixReviewTime varchar(96),
+	unixReviewTime TIMESTAMP,
 	reviewerName varchar(255),
 	reviewTime varchar (50))
 """)
@@ -111,6 +111,23 @@ FROM (
 
 select timestamp 'epoch' + ts * interval '0.001 second' AS ts
 FROM salesrank )
+""")
+
+time_table_insert2 = ("""
+INSERT INTO time (start_time, hour, day, week, month, year, weekday)
+
+SELECT ts AS start_time
+,extract(hour from ts) AS hour
+,extract(day from ts) AS day
+,extract(week from ts) AS week
+,extract(month from ts) AS month
+,extract(year from ts) AS year
+,extract(weekday from ts) AS weekday
+
+FROM (
+
+select unixReviewTime 'epoch' + ts * interval '0.001 second' AS ts
+FROM reviews )
 """)
 
 drop_table_queries = [staging_books_table_drop, staging_books_reviews_drop, time_table_drop, salesrank_table_drop]

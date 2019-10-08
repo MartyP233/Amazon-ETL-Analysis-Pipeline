@@ -2,11 +2,11 @@ from kindle import unzip_data, pre_process_files, create_redshift_cluster, load_
 
 def main():
     
-    # unzip_data.main()
-    # pre_process_files.main()
+    unzip_data.main()
+    pre_process_files.main()
     create_redshift_cluster.main()
     load_files.main()
-    # destroy-redshift-cluster.main()
+    # destroy_redshift_cluster.main()
 
 if __name__ == "__main__":
     main()
